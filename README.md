@@ -1,2 +1,2 @@
 # DownloadSeisData
-Download seismic data from IRIS
+Download seismic data from FDSN
