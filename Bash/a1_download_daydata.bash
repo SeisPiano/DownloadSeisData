@@ -1,71 +1,85 @@
 #!/bin/bash
-# Download seismic daily miniseed data from iris
-#
+# download seismic day data by using FetchData
 # Yuechu Wu
 # 12131066@mail.sustech.edu.cn
 # 2022-01-09
 #
-# Downloading data from multiple stations
-# Updated 2022-05-10, Yuechu Wu 
+# read metadata and batch download
+# 2023-02-12, Yuechu Wu
 
+OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
-workPath=${PWD}
-
-# station information, refer to https://ds.iris.edu/mda
 network=XO
-stations=(WD52 WD55)
-startdate=2018-11-01
-enddate=2019-01-31
-channel=HH? # Sometimes need to use HH?, refer to the specific station on IRIS-MDA
-pressure=HDH
-location=--
-OBS=true   # for OBS, OBS=true; for land stations, OBS=others
+location=-- # for OBS, location=--; for land stations, location=00
 
+DATAdir="DATA/mseed_day"  # seismic data directory
+IRdir="DATA/response"     # instrument response directory
 
-### end user input parameters ###
+metadata=DATA/METADATA/${network}_metadata.txt
 
-DATAdir="$workPath/DATA/mseed/datacache_day" # data directory
-IRdir="$workPath/DATA/PZs"     	             # instrument response directory
-
-# make day data and PZs folder
-for station in ${stations[@]}
+##### END OF USER INPUT #####
+for mdata in `cat $metadata | awk '{print $1"_"$2"_"$3"_"$4"_"$5}'` # begin station loop
 do
-if [ -d "$DATAdir/$network/$station" ];then
-    echo "Station directory exists!"
+
+station=`echo $mdata | awk -F "_" '{print$2}'`
+channel=`echo $mdata | awk -F "_" '{print$3}'`
+startdate=`echo $mdata | awk -F "_" '{print$4}'` # startdate:yyyy-mm-dd
+enddate=`echo $mdata | awk -F "_" '{print$5}'`   # enddate:yyyy-mm-dd
+
+if ! [ -d ${DATAdir}/${network}/${station} ]; then  # make station directory
+    mkdir -p ${DATAdir}/${network}/${station}
+fi    
+
+stdate=$startdate # stdate:yyyy-mm-dd
+
+if [ "${OStype}"x == "MacOS"x ]; then
+    sdate=`date -j -f %Y-%m-%d "${stdate}" +%Y%m%d`  # sdate:yyyymmdd
+    edate=`date -j -f %Y-%m-%d "${enddate}" +%Y%m%d` # edate:yyyymmdd
+elif [ "${OStype}"x == "Linux"x ]; then
+    sdate=`date -d "${stdate}" +%Y%m%d`    # sdate:yyyymmdd
+    edate=`date -d "${enddate}" +%Y%m%d`   # edate:yyyymmdd
 else
-    mkdir -p "$DATAdir/$network/$station"
+    echo "Unsupported system type! Please input MacOS or Linux."
+    exit 1
 fi
-if [ -d "$IRdir/$network/$station" ];then
-    echo "Instrument response directory exists!"
+
+while [ "$sdate" -le "$edate" ] # begin date loop
+do
+
+mseedfile=${DATAdir}/${network}/${station}/${sdate}0000_${network}_${station}.mseed
+sacpzdir=${IRdir}/sacpz_day/${network}/${station}/${sdate}
+respdir=${IRdir}/resp_day/${network}/${station}/${sdate}
+
+if ! [ -d $sacpzdir ]; then
+    mkdir -p $sacpzdir
+fi
+if ! [ -d $respdir ]; then
+    mkdir -p $respdir
+fi
+
+if [ "${OStype}"x == "MacOS"x ]; then
+    nextdate=`date -v +1d -j -f %Y-%m-%d "${stdate}" +%Y-%m-%d` # nextdate:yyyy-mm-dd
+elif [ "${OStype}"x == "Linux"x ]; then
+    nextdate=`date -d "+1 day ${stdate}" +%Y-%m-%d`  # nextdate:yyyy-mm-dd
 else
-    mkdir -p "$IRdir/$network/$station"
+    echo "Unsupported system type! Please input MacOS or Linux."
+    exit 1
 fi
-done   
 
-for station in ${stations[@]} # begin station loop
-do
-stdate=`date -d "$startdate" +%Y%m%d`
-eddate=`date -d "$enddate" +%Y%m%d`
-while [ "$stdate" -le "$eddate" ] # begin date loop
-do
+# Download seismic data and corresponding instrument response
+echo Downloading station: $station From: ${stdate}T00:00:00 To ${nextdate}T00:00:00
+FetchData -N $network -S $station -L $location -C $channel -s ${stdate},00:00:00 -e ${nextdate},00:00:00 -o $mseedfile -sd $sacpzdir -rd $respdir
 
-mkdir $IRdir/$network/$station/$stdate # make PZs daily file
-
-# Download seismic data and PZs
-echo Downloading seismic data
-echo Downloading station: $station From: `date -d $stdate +%Y-%m-%d`T00:00:00 To `date -d "1 day $stdate" +%Y-%m-%d`T00:00:00
-./FetchData -N $network -S $station -L $location -C $channel -s `date -d $stdate +%Y-%m-%d`T00:00:00 -e `date -d "1 day $stdate" +%Y-%m-%d`T00:00:00 -o $DATAdir/$network/$station/${stdate}0000_${network}_${station}.mseed -sd $IRdir/$network/$station/$stdate
-
-# For OBS, download pressure data and corresponding PZs
-if [ "$OBS"x = "true"x ];then
-echo Downloading pressure data
-echo Downloading station: $station From: `date -d $stdate +%Y-%m-%d`T00:00:00 To `date -d "1 day $stdate" +%Y-%m-%d`T00:00:00
-./FetchData -N $network -S $station -L $location -C $pressure -s `date -d $stdate +%Y-%m-%d`T00:00:00 -e `date -d "1 day $stdate" +%Y-%m-%d`T00:00:00 -o $DATAdir/$network/$station/${stdate}0000_${network}_${station}_p.mseed -sd $IRdir/$network/$station/$stdate
+if [ "${OStype}"x == "MacOS"x ]; then
+    stdate=`date -v +1d -j -f %Y-%m-%d "${stdate}" +%Y-%m-%d`
+    sdate=`date -j -f %Y-%m-%d "${stdate}" +%Y%m%d`
+elif [ "${OStype}"x == "Linux"x ]; then
+    stdate=`date -d "+1 day ${stdate}" +%Y-%m-%d`
+    sdate=`date -d "${stdate}" +%Y%m%d`
+else
+    echo "Unsupported system type! Please input MacOS or Linux."
+    exit 1
 fi
-let stdate=`date -d "1 day ${stdate}" +%Y%m%d`
 
 done # end date loop
-
 done # end station loop
-
-
