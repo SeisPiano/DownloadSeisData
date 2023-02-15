@@ -20,7 +20,7 @@ export PATH=your/path/of/Fetch/scripts:$PATH
 ```
 
 ### Get metadata
-Input network, station, location and channel for seismic data download.
+Set network, station, location and channel in `a1_get_metadata` for follow-up seismic data download.
 
 ```shell
 network=XO
@@ -29,9 +29,9 @@ location=--,00
 allchannel=HH?,BH?,HDH,EDH
 
 ```
-Run `1_get_metadata.bash`
+Run `a1_get_metadata.bash`
 ```shell
-bash 1_get_metadata.bash
+bash a1_get_metadata.bash
 ```
 Then a metadata text file will be generated, and users can change the fourth column (start) and fifth column (end) to the required time.
 
@@ -41,8 +41,36 @@ XO WD55 HDH,HH1,HH2,HHZ 2018-07-20 2019-09-01 55.761625 -153.662817 -1283.5
 ```
 
 ### Download day data
-Input the network, and the script `a1_download_daydata` will automatically match the corresponding metadata file to download the daily seismic data. The instrument response file will also be downloaded.
+Set the network in `b1_download_daydata`, and this script will automatically match the corresponding metadata file to download the daily seismic data. The instrument response file will also be downloaded.
 
 ```shell
-bash a1_download_daydata.bash
+bash b1_download_daydata.bash
+```
+
+### Download event data
+Set network and event filter conditions in `a2_get_event_info` to get event information.
+
+```shell
+network=XO
+
+maxradius=180
+minradius=30
+minmag=5.5
+maxmag=10
+```
+Run `a2_get_event_info.bash`
+```shell
+bash a2_get_event_info.bash
+```
+Then this script `a2_get_event_info` will automatically match the corresponding metadata file to download the event information for each station.
+
+Set the network and event_length in `b2_download_eventdata`. The `event_length` means length of time series after each start time in seconds.
+```shell
+network=XO
+
+event_length=7200
+```
+Run `b2_download_eventdata`, this script will automatically match the corresponding metadata file and event information file to download the event seismic data. And the instrument response file will also be downloaded.
+```shell
+bash b2_download_eventdata.bash
 ```
