@@ -31,7 +31,7 @@ make
 sudo cp mseed2sac /usr/local/bin/
 ```
 
-#### [Install sac](https://seisman.github.io/SAC_Docs_zh/install/)
+#### [Install SAC](https://seisman.github.io/SAC_Docs_zh/install/)
 
 Install `SAC` if using scripts d1_daydata_preprocess and d2_eventdata_preprocess.
 
