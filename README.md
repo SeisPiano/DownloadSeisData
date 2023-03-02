@@ -23,7 +23,17 @@ export PATH=your/path/of/Fetch/scripts:$PATH
 ### Optional preparation
 Install [mseed2sac](https://github.com/iris-edu/mseed2sac) and [SAC](https://ds.iris.edu/ds/nodes/dmc/forms/sac/) if using scripts c1_mseed2sac_day and c2_mseed2sac_event.
 
-Install [SAC](https://ds.iris.edu/ds/nodes/dmc/forms/sac/) if using scripts d1_daydata_preprocess and d2_eventdata_preprocess.
+#### Install mseed2sac
+```shell
+tar -zxvf mseed2sac-2.3.tar.gz
+cd mseed2sac-2.3/
+make
+sudo cp mseed2sac /usr/local/bin/
+```
+
+#### [Install sac](https://seisman.github.io/SAC_Docs_zh/install/)
+
+Install `SAC` if using scripts d1_daydata_preprocess and d2_eventdata_preprocess.
 
 
 ### Get metadata
