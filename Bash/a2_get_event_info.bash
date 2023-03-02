@@ -11,16 +11,17 @@ OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
 network=XO
 
-maxradius=180  # Specify circular region
-minradius=30   # Specify circular region with optional minimum radius, can be 0
+OUTPUTdir="DATA/EVENTINFO" # event information directory
+metadata=DATA/METADATA/${network}_metadata.txt
+
+maxradius=180  # specify circular region
+minradius=30   # specify circular region with optional minimum radius, can be 0
 minmag=5.5     # minimum magnitude
 maxmag=10      # maximum magnitude
 
-OUTPUTdir="DATA/EVENTINFO"
-metadata=DATA/METADATA/${network}_metadata.txt
 
 ##### END OF USER INPUT #####
-if ! [ -d ${OUTPUTdir}/${network} ]; then
+if [ ! -d ${OUTPUTdir}/${network} ]; then
     mkdir -p ${OUTPUTdir}/${network}
 fi
 
@@ -42,14 +43,16 @@ else
     exit 1
 fi
     
-eventfile=${OUTPUTdir}/${network}/${network}_${station}_eventinfo.txt  # event list file name
-timefile=${OUTPUTdir}/${network}/${network}_${station}_time.txt       # event time file name
-locmagfile=${OUTPUTdir}/${network}/${network}_${station}_locmag.txt   # event location and magnitude file name
+eventinfo=${OUTPUTdir}/${network}/${network}_${station}_info.txt       # event information file name
+eventlist=${OUTPUTdir}/${network}/${network}_${station}_list.txt       # event information file name
+eventtime=${OUTPUTdir}/${network}/${network}_${station}_time.txt       # event time file name
+eventlocmag=${OUTPUTdir}/${network}/${network}_${station}_locmag.txt   # event location and magnitude file name
     
 echo Downloading event information of $network-$station from ${stdate}T00:00:00 to ${eddate}T00:00:00    
-FetchEvent -s ${stdate},00:00:00 -e ${eddate},00:00:00 --radius $latitude:$longitude:$maxradius:$minradius --mag $minmag:$maxmag -o $eventfile
+FetchEvent -s ${stdate},00:00:00 -e ${eddate},00:00:00 --radius $latitude:$longitude:$maxradius:$minradius --mag $minmag:$maxmag -o $eventinfo
 
-cat $eventfile | awk -F"|" '{print $2}' | awk -F"/" '{print $1,$2,$3}' | awk -F":" '{print $1,$2,$3}' | awk '{print $1$2$3$4$5$6}' > $timefile
-cat $eventfile | awk -F"|" '{print $3,$4,$5,$9}' | awk -F"," '{print $1,$2}' | awk '{print $1,$2,$3,$5}' > $locmagfile
+cat $eventinfo | awk -F"|" '{print $2}' | awk -F"/" '{print $1,$2,$3}' | awk -F":" '{print $1,$2,$3}' | awk '{print $1$2$3$4$5$6}' > $eventtime
+cat $eventinfo | awk -F"|" '{print $3,$4,$5,$9}' | awk -F"," '{print $1,$2}' | awk '{print $1,$2,$3,$5}' > $eventlocmag
+cat $eventinfo | awk -F"|" '{print $2,$3,$4,$5,$9}' | awk -F"/" '{print $1,$2,$3}' | awk -F":" '{print $1,$2,$3}' | awk -F"," '{print $1,$2}' | awk '{print $1$2$3$4$5$6,$7,$8,$9,$11}' > $eventlist
 
 done # end station loop
