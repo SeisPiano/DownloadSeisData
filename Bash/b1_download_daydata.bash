@@ -10,12 +10,14 @@
 OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
 network=XO
-location=-- # for OBS, location=--; for land stations, location=00
 
 DATAdir="DATA/mseed_day"  # seismic data directory
 IRdir="DATA/response"     # instrument response directory
 
 metadata=DATA/METADATA/${network}_metadata.txt
+
+location=-- # for OBS, location=--; for land stations, location=00
+
 
 ##### END OF USER INPUT #####
 for mdata in `cat $metadata | awk '{print $1"_"$2"_"$3"_"$4"_"$5}'` # begin station loop
@@ -26,7 +28,7 @@ channel=`echo $mdata | awk -F "_" '{print$3}'`
 startdate=`echo $mdata | awk -F "_" '{print$4}'` # startdate:yyyy-mm-dd
 enddate=`echo $mdata | awk -F "_" '{print$5}'`   # enddate:yyyy-mm-dd
 
-if ! [ -d ${DATAdir}/${network}/${station} ]; then  # make station directory
+if [ ! -d ${DATAdir}/${network}/${station} ]; then  # make station directory
     mkdir -p ${DATAdir}/${network}/${station}
 fi    
 
@@ -50,10 +52,10 @@ mseedfile=${DATAdir}/${network}/${station}/${sdate}0000_${network}_${station}.ms
 sacpzdir=${IRdir}/sacpz_day/${network}/${station}/${sdate}
 respdir=${IRdir}/resp_day/${network}/${station}/${sdate}
 
-if ! [ -d $sacpzdir ]; then
+if [ ! -d $sacpzdir ]; then
     mkdir -p $sacpzdir
 fi
-if ! [ -d $respdir ]; then
+if [ ! -d $respdir ]; then
     mkdir -p $respdir
 fi
 
@@ -67,8 +69,12 @@ else
 fi
 
 # Download seismic data and corresponding instrument response
-echo Downloading station: $station From: ${stdate}T00:00:00 To ${nextdate}T00:00:00
-FetchData -N $network -S $station -L $location -C $channel -s ${stdate},00:00:00 -e ${nextdate},00:00:00 -o $mseedfile -sd $sacpzdir -rd $respdir
+if [ -f ${mseedfile} ] && ! [ "`ls -A $sacpzdir`" = "" ] && ! [ "`ls -A $respdir`" = "" ]; then
+    echo Exist: ${mseedfile} Skip!
+else
+    echo Downloading station: $station From: ${stdate}T00:00:00 To ${nextdate}T00:00:00
+    FetchData -N $network -S $station -L $location -C $channel -s ${stdate},00:00:00 -e ${nextdate},00:00:00 -o $mseedfile -sd $sacpzdir -rd $respdir
+fi
 
 if [ "${OStype}"x == "MacOS"x ]; then
     stdate=`date -v +1d -j -f %Y-%m-%d "${stdate}" +%Y-%m-%d`
