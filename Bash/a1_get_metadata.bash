@@ -6,27 +6,28 @@
 
 OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
-network=XO  # station information can be obtained from https://ds.iris.edu/mda
-stations=WD52,WD55
-
-location=--,00 # for OBS,location code=--; for land stations, only download the instrument which location code=00
-allchannel=HH?,BH?,HDH,EDH
-
 OUTPUTdir="DATA/METADATA" # stations metadata directory
-
 outdata=${OUTPUTdir}/${network}_metadata.txt
 origindata=${OUTPUTdir}/${network}_origin_metadata.txt
 tempdata=${OUTPUTdir}/${network}_temp_metadata.txt
-##### END OF USER INPUT #####
 
-if ! [ -d $OUTPUTdir ]; then
+# station information can be obtained from https://ds.iris.edu/mda
+network=XO  # network name to download metadata
+stations=WD52,WD55 # list of stations to download
+
+location=--,00 # for OBS,location code=--; for land stations, only download the instrument which location code=00
+allchannel=HH?,BH?,HDH,EDH # list of channels to download
+
+
+##### END OF USER INPUT #####
+if [ ! -d $OUTPUTdir ]; then
     mkdir -p $OUTPUTdir
 fi
 
 if [ -f $outdata ]; then
     rm $outdata
 fi
-
+echo Downloading station metadata of $network-$stations
 FetchMetadata -N $network -S $stations -L $location -C $allchannel -o $origindata
 
 cat $origindata | awk -F"|" '{print $1,$2,$4,$16,$17,$5,$6,$7}' > $tempdata
