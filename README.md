@@ -1,6 +1,11 @@
 # DownloadSeisData
 `DownloadSeisData` is a package that automatically downloads seismic data, and it provides the conversion of miniSEED data into SAC format and common data preprocessing. Now, shell versions are available. There may be more versions in the future.
 
+## 项目介绍
+[被动源OBS数据处理（1）：下载地震数据](https://mp.weixin.qq.com/s/GmxilrDyoDM29OMEzBoSRw)
+
+[被动源OBS数据处理（2）：地震数据预处理](https://mp.weixin.qq.com/s/kVvvKB2QE_1ZgR6mXHAkPQ)
+
 ## Shell version manual
 Automatic download of seismic data by using `FetchMetaData`, `FetchEvent` and `FetchData`.
 
