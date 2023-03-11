@@ -9,15 +9,17 @@
 
 OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
-network=XO
 
-OUTPUTdir="DATA/EVENTINFO" # event information directory
-metadata=DATA/METADATA/${network}_metadata.txt
+network=XO # network name
 
 maxradius=180  # specify circular region
 minradius=30   # specify circular region with optional minimum radius, can be 0
 minmag=5.5     # minimum magnitude
 maxmag=10      # maximum magnitude
+
+OUTPUTdir="DATA/EVENTINFO" # event information directory
+
+metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 
 
 ##### END OF USER INPUT #####
