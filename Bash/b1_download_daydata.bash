@@ -9,14 +9,14 @@
 
 OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
-network=XO
+
+network=XO # network name
+location=-- # for OBS, location=--; for land stations, location=00
 
 DATAdir="DATA/mseed_day"  # seismic data directory
 IRdir="DATA/response"     # instrument response directory
 
-metadata=DATA/METADATA/${network}_metadata.txt
-
-location=-- # for OBS, location=--; for land stations, location=00
+metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 
 
 ##### END OF USER INPUT #####
