@@ -10,15 +10,14 @@
 export SAC_DISPLAY_COPYRIGHT=0 # hide version information
 
 
-network=XO
-
-INPUTdir="DATA/mseed_event" # miniSEED event data directory
-OUTPUTdir="DATA/SAC_event"  # SAC event data directory
-
-metadata=DATA/METADATA/${network}_metadata.txt # station meta data
-EVENTINFOdir="DATA/EVENTINFO" # event information directory
-
+network=XO # network name
 filesuff=SAC # suffix of SAC data
+
+INPUTdir="DATA/mseed_event"   # miniSEED event data directory
+OUTPUTdir="DATA/SAC_event"    # SAC event data directory
+
+EVENTINFOdir="DATA/EVENTINFO" # match the event information directory
+metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 
 
 ##### END OF USER INPUT #####
