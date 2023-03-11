@@ -9,14 +9,14 @@
 export SAC_DISPLAY_COPYRIGHT=0 # hide version information
 
 
-network=XO
+network=XO # network name
+filesuff=SAC # suffix of SAC data
 
 INPUTdir="DATA/mseed_day" # miniSEED day data directory
 OUTPUTdir="DATA/SAC_day"  # SAC day data directory
 
-metadata=DATA/METADATA/${network}_metadata.txt # station meta data
+metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 
-filesuff=SAC # suffix of SAC data
 
 ##### END OF USER INPUT #####
 for station in `ls ${INPUTdir}/${network}` # begin station loop
