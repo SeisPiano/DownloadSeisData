@@ -9,16 +9,17 @@
 
 OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
 
-network=XO
 
-DATAdir="DATA/mseed_event"  # seismic data directory
-IRdir="DATA/response"       # instrument response directory
-
-metadata=DATA/METADATA/${network}_metadata.txt
-EVENTINFOdir="DATA/EVENTINFO" # event information directory
-
+network=XO # network name
 location=-- # for OBS, location=--; for land stations, location=00
 event_length=7200  # The length of seismic event data, in second
+
+
+DATAdir="DATA/mseed_event"    # seismic data directory
+IRdir="DATA/response"         # instrument response directory
+
+EVENTINFOdir="DATA/EVENTINFO" # match the event information directory
+metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 
 
 ##### END OF USER INPUT #####
