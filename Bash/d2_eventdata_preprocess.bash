@@ -13,18 +13,18 @@
 export SAC_DISPLAY_COPYRIGHT=0 # hide version information
 
 
-network=XO
-
-INPUTdir="DATA/SAC_event"          # SAC event data directory
-OUTPUTdir="DATA/datacache_preproc" # preprocessed SAC event data directory
+network=XO # network name
 
 irrm="resp" # method of removing instrument response, "sacpz" or "resp"
 oneir=0 # 1 means each component of each station only corresponds to one instrument response file, which should be in the "IRdir/network" directory. 0 means instrument response file in the "IRdir/network/date" directory.
-pre_filt=(0.001 0.005 10 20)   #  pre-filtering in the frequency domain (specifying the four corner frequencies of the frequency taper).
+freqlimits=(0.001 0.005 10 20)   #  low-pass and high-pass taper in the frequency domain (specifying the four corner frequencies of the frequency taper).
 
 samplerate=5 # new sample rate
 
 istaper=0 # 1 means taper, 0 means don't.
+
+INPUTdir="DATA/SAC_event"          # SAC event data directory
+OUTPUTdir="DATA/datacache_preproc" # preprocessed SAC event data directory
 
 
 ##### END OF USER INPUT #####
@@ -84,7 +84,7 @@ if [ "${irrm}"x = "sacpz"x ]; then
 sac << EOF
 read ${outsac}
 rmean; rtrend
-trans from polezero subtype ${irfile} to none freq ${pre_filt[0]} ${pre_filt[1]} ${pre_filt[2]} ${pre_filt[3]} prew on
+trans from polezero subtype ${irfile} to none freq ${freqlimits[0]} ${freqlimits[1]} ${freqlimits[2]} ${freqlimits[3]} prew on
 mul 1.0e9
 interpolate delta ${dt_new}
 write over
@@ -94,7 +94,7 @@ elif [ "${irrm}"x = "resp"x ]; then
 sac << EOF
 read ${outsac}
 rmean; rtrend
-trans from evalresp fname ${irfile} to none freq ${pre_filt[0]} ${pre_filt[1]} ${pre_filt[2]} ${pre_filt[3]} prew on
+trans from evalresp fname ${irfile} to none freq ${freqlimits[0]} ${freqlimits[1]} ${freqlimits[2]} ${freqlimits[3]} prew on
 interpolate delta ${dt_new}
 write over
 quit
