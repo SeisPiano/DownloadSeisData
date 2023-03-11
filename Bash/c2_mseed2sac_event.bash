@@ -73,6 +73,7 @@ sac << EOF
 read ${sacfile}
 chnhdr STLA ${latitude} STLO ${longitude} STEL ${elevation}
 chnhdr EVLA ${event_latitude} EVLO ${event_longitude} EVDP ${event_depth} MAG ${event_magnitude}
+chnhdr O 0
 wh
 q
 EOF
