@@ -10,16 +10,17 @@
 # 12131066@mail.sustech.edu.cn
 # 2023-02-28
 
+
 export SAC_DISPLAY_COPYRIGHT=0 # hide version information
 
 
-network=XO # network name
+network=XO  # network name
 
-irrm="resp" # method of removing instrument response, "sacpz" or "resp"
-oneir=0 # 1 means each component of each station only corresponds to one instrument response file, which should be in the IRdir/network/station directory. 0 means instrument response file in the IRdir/network/station/date directory.
-freqlimits=(0.001 0.005 10 20)  #  low-pass and high-pass taper in the frequency domain (specifying the four corner frequencies of the frequency taper).
+irrm=resp   # method of removing instrument response, "sacpz" or "resp"
+oneir=0     # 1 means each component of each station only corresponds to one instrument response file, which in the "IRdir/network/station" directory. 0 means instrument response file in the "IRdir/network/station/date" directory.
+freqlimits=(0.001 0.005 10 20)  # low-pass and high-pass taper in the frequency domain (specifying the four corner frequencies of the frequency taper).
 
-samplerate=5 # new sample rate
+samprate=5  # new sample rate
 
 INPUTdir="DATA/SAC_day"                 # SAC day data directory
 OUTPUTdir="DATA/datacache_day_preproc"  # preprocessed SAC day data directory
@@ -60,7 +61,7 @@ channel=`echo ${sacname} | awk -F"_" '{print $4}' | awk -F"." '{print $1}'`
 # samplerate_old=`echo 1 ${dt} | awk '{printf("%d",$1/$2)}'`
 # downfactor=`echo ${samplerate_old} ${samplerate} | awk '{printf("%d",$1/$2)}'`
 
-if [ ${oneir} -eq 1 ];then
+if [ ${oneir} -eq 1 ]; then
     irpath=${IRdir}/${network}/${station}
 else
     irpath=${IRdir}/${network}/${station}/${date}
@@ -70,17 +71,22 @@ irfile=`find ${irpath} -maxdepth 1 -name "*${station}*${channel}"`
 
 # call sac for data preprocessing
 # rmean; rtrend
-# remove instrument response: the default unit of SAC is nm, so it needs to be multiplied by 1.0e9
+# remove instrument response: the unit of response removed SAC data is m
 # downsampling: The product of two downsampling factors = old sample rate / new sample rate
 
-dt_new=`echo 1 ${samplerate} | awk '{printf("%f",$1/$2)}'`
+dt_new=`echo 1 ${samprate} | awk '{printf("%f",$1/$2)}'`
+
+if [[ $channel =~ DH ]]; then
+    echo -e "\e[36mStation: ${station}.${channel} deconvolve to Pa \e[0m \n"
+else
+    echo -e "\e[36mStation: ${station}.${channel} deconvolve to M \e[0m \n"
+fi
 
 if [ "${irrm}"x = "sacpz"x ]; then
 sac << EOF
 read ${outsac}
 rmean; rtrend
 trans from polezero subtype ${irfile} to none freq ${freqlimits[0]} ${freqlimits[1]} ${freqlimits[2]} ${freqlimits[3]} prew on
-mul 1.0e9
 interpolate delta ${dt_new}
 write over
 quit
@@ -90,6 +96,7 @@ sac << EOF
 read ${outsac}
 rmean; rtrend
 trans from evalresp fname ${irfile} to none freq ${freqlimits[0]} ${freqlimits[1]} ${freqlimits[2]} ${freqlimits[3]} prew on
+mul 1.0e-9
 interpolate delta ${dt_new}
 write over
 quit
