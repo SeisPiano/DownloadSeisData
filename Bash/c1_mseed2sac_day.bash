@@ -6,11 +6,12 @@
 # 12131066@mail.sustech.edu.cn
 # 2023-02-26
 
+
 export SAC_DISPLAY_COPYRIGHT=0 # hide version information
 
 
-network=XO # network name
-filesuff=SAC # suffix of SAC data
+network=XO    # network name
+filesuff=SAC  # suffix of SAC data
 
 INPUTdir="DATA/mseed_day" # miniSEED day data directory
 OUTPUTdir="DATA/SAC_day"  # SAC day data directory
@@ -21,13 +22,13 @@ metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 ##### END OF USER INPUT #####
 for station in `ls ${INPUTdir}/${network}` # begin station loop
 do
-if [ ! -d "${INPUTdir}/${network}/${station}" ];then
+if [ ! -d "${INPUTdir}/${network}/${station}" ]; then
     continue
 fi
 echo ${station}
 
 # make SAC data folder
-if [ ! -d "${OUTPUTdir}/${network}/${station}" ];then
+if [ ! -d "${OUTPUTdir}/${network}/${station}" ]; then
     mkdir -p "${OUTPUTdir}/${network}/${station}"
 fi
 
@@ -46,7 +47,7 @@ for sactemp in `ls *.SAC` # begin channel loop
 do
 channel=`echo $sactemp | awk -F"." '{print $4}'`
 time=`echo $sactemp | awk -F"." '{print $8}'`
-sacfile=${mseedname:0:8}${time:0:4}_${network}_${station}_${channel}.${filesuff} # sac data name
+sacfile=${mseedname:0:8}${time}_${network}_${station}_${channel}.${filesuff} # sac data name
 
 mv ${sactemp} ${sacfile} # rename
 
