@@ -7,11 +7,12 @@
 # read metadata and batch download
 # 2023-02-12, Yuechu Wu
 
-OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
+
+OStype=MacOS # "MacOS" for Mac OS user, "Linux" for Linux user
 
 
-network=XO # network name
-location=-- # for OBS, location=--; for land stations, location=00
+network=XO   # network name
+location=--  # for OBS, location=--; for land stations, location=00
 
 DATAdir="DATA/mseed_day"  # seismic data directory
 IRdir="DATA/response"     # instrument response directory
@@ -25,21 +26,21 @@ do
 
 station=`echo $mdata | awk -F "_" '{print$2}'`
 channel=`echo $mdata | awk -F "_" '{print$3}'`
-startdate=`echo $mdata | awk -F "_" '{print$4}'` # startdate:yyyy-mm-dd
-enddate=`echo $mdata | awk -F "_" '{print$5}'`   # enddate:yyyy-mm-dd
+startdate=`echo $mdata | awk -F "_" '{print$4}'` # startdate: yyyy-mm-dd
+enddate=`echo $mdata | awk -F "_" '{print$5}'`   # enddate: yyyy-mm-dd
 
 if [ ! -d ${DATAdir}/${network}/${station} ]; then  # make station directory
     mkdir -p ${DATAdir}/${network}/${station}
 fi    
 
-stdate=$startdate # stdate:yyyy-mm-dd
+stdate=$startdate # stdate: yyyy-mm-dd
 
 if [ "${OStype}"x == "MacOS"x ]; then
-    sdate=`date -j -f %Y-%m-%d "${stdate}" +%Y%m%d`  # sdate:yyyymmdd
-    edate=`date -j -f %Y-%m-%d "${enddate}" +%Y%m%d` # edate:yyyymmdd
+    sdate=`date -j -f %Y-%m-%d "${stdate}" +%Y%m%d`  # sdate: yyyymmdd
+    edate=`date -j -f %Y-%m-%d "${enddate}" +%Y%m%d` # edate: yyyymmdd
 elif [ "${OStype}"x == "Linux"x ]; then
-    sdate=`date -d "${stdate}" +%Y%m%d`    # sdate:yyyymmdd
-    edate=`date -d "${enddate}" +%Y%m%d`   # edate:yyyymmdd
+    sdate=`date -d "${stdate}" +%Y%m%d`    # sdate: yyyymmdd
+    edate=`date -d "${enddate}" +%Y%m%d`   # edate: yyyymmdd
 else
     echo "Unsupported system type! Please input MacOS or Linux."
     exit 1
@@ -48,7 +49,8 @@ fi
 while [ "$sdate" -le "$edate" ] # begin date loop
 do
 
-mseedfile=${DATAdir}/${network}/${station}/${sdate}0000_${network}_${station}.mseed
+dayid=${sdate}000000 # dayid: yyyymmddHHMMSS
+mseedfile=${DATAdir}/${network}/${station}/${dayid}_${network}_${station}.mseed
 sacpzdir=${IRdir}/sacpz_day/${network}/${station}/${sdate}
 respdir=${IRdir}/resp_day/${network}/${station}/${sdate}
 
@@ -60,9 +62,9 @@ if [ ! -d $respdir ]; then
 fi
 
 if [ "${OStype}"x == "MacOS"x ]; then
-    nextdate=`date -v +1d -j -f %Y-%m-%d "${stdate}" +%Y-%m-%d` # nextdate:yyyy-mm-dd
+    nextdate=`date -v +1d -j -f %Y-%m-%d "${stdate}" +%Y-%m-%d` # nextdate: yyyy-mm-dd
 elif [ "${OStype}"x == "Linux"x ]; then
-    nextdate=`date -d "+1 day ${stdate}" +%Y-%m-%d`  # nextdate:yyyy-mm-dd
+    nextdate=`date -d "+1 day ${stdate}" +%Y-%m-%d`  # nextdate: yyyy-mm-dd
 else
     echo "Unsupported system type! Please input MacOS or Linux."
     exit 1
