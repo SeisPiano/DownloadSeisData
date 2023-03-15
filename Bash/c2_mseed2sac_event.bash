@@ -10,8 +10,8 @@
 export SAC_DISPLAY_COPYRIGHT=0 # hide version information
 
 
-network=XO # network name
-filesuff=SAC # suffix of SAC data
+network=XO    # network name
+filesuff=SAC  # suffix of SAC data
 
 INPUTdir="DATA/mseed_event"   # miniSEED event data directory
 OUTPUTdir="DATA/SAC_event"    # SAC event data directory
@@ -23,7 +23,7 @@ metadata=DATA/METADATA/${network}_metadata.txt # match the station metadata
 ##### END OF USER INPUT #####
 for eventid in `ls ${INPUTdir}/${network}` # begin event loop
 do
-if [ ! -d "${INPUTdir}/${network}/${eventid}" ];then
+if [ ! -d "${INPUTdir}/${network}/${eventid}" ]; then
     continue
 fi
 
@@ -35,7 +35,7 @@ if [ "`ls -A ${INPUTdir}/${network}/${eventid}`" = "" ]; then # skip empty folde
 fi
 
 # make SAC data folder
-if [ ! -d "${OUTPUTdir}/${network}/${eventid}" ];then
+if [ ! -d "${OUTPUTdir}/${network}/${eventid}" ]; then
     mkdir -p "${OUTPUTdir}/${network}/${eventid}"
 fi
 
