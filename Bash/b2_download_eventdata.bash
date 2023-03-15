@@ -7,11 +7,12 @@
 # read metadata and event information, and batch download
 # 2023-02-15, Yuechu Wu
 
-OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
+
+OStype=MacOS # "MacOS" for Mac OS user, "Linux" for Linux user
 
 
-network=XO # network name
-location=-- # for OBS, location=--; for land stations, location=00
+network=XO   # network name
+location=--  # for OBS, location=--; for land stations, location=00
 event_length=7200  # The length of seismic event data, in second
 
 
@@ -34,7 +35,7 @@ timeinfo=${EVENTINFOdir}/${network}/${network}_${station}_time.txt
 for starttime in `cat $timeinfo` # begin event time loop
 do
 
-eventid="${starttime:0:4}${starttime:4:2}${starttime:6:2}${starttime:8:2}${starttime:10:2}" # yyyymmddHHMM
+eventid="${starttime:0:4}${starttime:4:2}${starttime:6:2}${starttime:8:2}${starttime:10:2}${starttime:12:2}" # yyyymmddHHMMSS
 stime="${starttime:0:4}-${starttime:4:2}-${starttime:6:2},${starttime:8:2}:${starttime:10:2}:${starttime:12:2}.${starttime:15:3}" # yyyymmddTHH:MM:SS.sss
 msec="${starttime:15:3}"
 
