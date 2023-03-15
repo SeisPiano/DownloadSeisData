@@ -7,13 +7,14 @@
 # read metadata and batch download
 # 2023-02-11, Yuechu Wu
 
-OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
+
+OStype=MacOS   # "MacOS" for Mac OS user, "Linux" for Linux user
 
 
-network=XO # network name
+network=XO     # network name
 
 maxradius=180  # specify circular region
-minradius=30   # specify circular region with optional minimum radius, can be 0
+minradius=0    # (specify circular region with) optional minimum radius, can be 0
 minmag=5.5     # minimum magnitude
 maxmag=10      # maximum magnitude
 
