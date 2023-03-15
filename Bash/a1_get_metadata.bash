@@ -4,19 +4,20 @@
 # 12131066@mail.sustech.edu.cn
 # 2023-02-08
 
-OStype="MacOS"  # "MacOS" for Mac OS user, "Linux" for Linux user
+
+OStype=MacOS  # "MacOS" for Mac OS user, "Linux" for Linux user
 
 
 # station information can be obtained from https://ds.iris.edu/mda
-network=XO  # network name to download metadata
-stations=WD52,WD55 # list of stations to download
+network=XO          # network name to download metadata
+stations=WD52,WD55  # list of stations to download
 
-location=--,00 # for OBS,location code=--; for land stations, only download the instrument which location code=00
-allchannel=HH?,BH?,HDH,EDH # list of channels to download
+location=--,00  # for OBS,location code=--; for land stations, only download the instrument which location code=00
+allchannel=HH?,BH?,HDH,BDH,EDH # list of channels to download
 
 OUTPUTdir="DATA/METADATA" # stations metadata directory
 
-outdata=${OUTPUTdir}/${network}_metadata.txt            # station metadata
+outdata=${OUTPUTdir}/${network}_metadata.txt            # station metadata for following steps
 origindata=${OUTPUTdir}/${network}_origin_metadata.txt  # original station metadata
 tempdata=${OUTPUTdir}/${network}_temp_metadata.txt      # temporary station metadata
 
