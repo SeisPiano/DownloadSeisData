@@ -42,7 +42,7 @@ Install `SAC` if using scripts `d1_daydata_preprocess` and `d2_eventdata_preproc
 
 
 ### Get metadata
-Set network, station, location and channel in `a1_get_metadata` for follow-up seismic data download.
+Set network, station, location and channel in `a1_get_metadata` for seismic data download.
 
 ```shell
 network=XO
@@ -55,7 +55,7 @@ Run `a1_get_metadata.bash`
 ```shell
 bash a1_get_metadata.bash
 ```
-Then a metadata text file will be generated, and users can change the fourth column (start) and fifth column (end) to the required time.
+Then a metadata text file will be generated, and users can change the fourth column (start) and fifth column (end) to download the data of the corresponding time interval.
 
 ```
 XO WD52 HDH,HH1,HH2,HHZ 2018-07-18 2019-09-03 54.046622 -159.346215 -2563.6
@@ -86,7 +86,7 @@ bash a2_get_event_info.bash
 ```
 Then this script `a2_get_event_info` will automatically match the corresponding metadata file to download the event information for each station.
 
-Set the network and event_length in `b2_download_eventdata`. The `event_length` means length of time series after each start time in seconds.
+Set the network and event_length in `b2_download_eventdata`. The `event_length` means length of time series after each origin time in seconds.
 ```shell
 network=XO
 
@@ -112,7 +112,7 @@ bash c2_mseed2sac_event.bash
 Run `d1_daydata_preprocess.bash` and `d2_eventdata_preprocess.bash`, the scripts will automatically match the SAC file and the corresponding instrument response file to remove the instrument response and perform the following preprocessing.
 
 Pre-procssing steps included here are:
-- Response Removal
+- Response removal
 - Downsampling
 - rmean, rtrend and taper
 
