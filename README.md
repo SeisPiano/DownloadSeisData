@@ -122,4 +122,4 @@ bash d2_eventdata_preprocess.bash
 ```
 **Note:** The default unit of SAC is nm, but the unit of instrument response removed data by these two scripts is m.
 
-I hope the `DownloadSeisData` package will help you. If you have any questions or suggestions, please contact me at <12131066@mail.sustech.edu.cn>.
+I hope the `DownloadSeisData` package will help you. If you have any questions or suggestions, please contact me at <12131066@mail.sustech.edu.cn> (Yuechu Wu).
