@@ -1,15 +1,29 @@
 # DownloadSeisData
 `DownloadSeisData` is a package that automatically downloads seismic data, and it provides the conversion of miniSEED data into SAC format and common data preprocessing. Now, shell version is available. There may be more versions in the future.
 
-## Chinese introduction
-[被动源OBS数据处理（1）：下载地震数据](https://mp.weixin.qq.com/s/GmxilrDyoDM29OMEzBoSRw)
 
-[被动源OBS数据处理（2）：地震数据预处理](https://mp.weixin.qq.com/s/kVvvKB2QE_1ZgR6mXHAkPQ)
+
+## Python version manual
+The Python version is based on [ObsPy](https://github.com/obspy/obspy), very concise and easy to read. It is strongly recommended to use this version, and the Bash version will no longer be maintained.
+
+### Requirements
+- python 3.8+
+- `obspy` installation instructions can be found in the [wiki](https://github.com/obspy/obspy/wiki#installation).
+- [numpy](https://github.com/numpy/numpy)
+- [pandas](https://github.com/pandas-dev/pandas) to read and write table file.
+- [tqdm](https://github.com/tqdm/tqdm) to get progressbars.
+
+
 
 ## Shell version manual
 Automatic download of seismic data by using `FetchMetaData`, `FetchEvent` and `FetchData`.
 
 (Optional) Data preprocessing by using `mseed2sac` and `SAC`.
+
+### Chinese introduction
+[被动源OBS数据处理（1）：下载地震数据](https://mp.weixin.qq.com/s/GmxilrDyoDM29OMEzBoSRw)
+
+[被动源OBS数据处理（2）：地震数据预处理](https://mp.weixin.qq.com/s/kVvvKB2QE_1ZgR6mXHAkPQ)
 
 ### Preparation
 Download the IRIS DMC's Fetch scripts from [http://service.iris.edu/clients](http://service.iris.edu/clients/). Rename and give executable permissions.
