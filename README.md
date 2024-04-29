@@ -1,5 +1,5 @@
 # DownloadSeisData
-`DownloadSeisData` is a package that automatically downloads seismic data, and it provides the conversion of miniSEED data into SAC format and common data preprocessing. Now, shell version is available. There may be more versions in the future.
+`DownloadSeisData` is a software package that automatically downloads seismic data. We strongly recommend using the Python version based on [ObsPy](https://github.com/obspy/obspy). It can automatically download station metadata, daily waveform data, and instrument responses. In addition, it can also download earthquake catalogs and waveform data of earthquake events based on station metadata. All waveform data is saved in `SAC` format. Since the corresponding response file is downloaded, We can convert the units of the waveform to displacement, velocity, acceleration (seismometer), or pressure (pressure gauge). At the same time, `DownloadSeisData` also saves station information and event information in the SAC header for subsequent use.
 
 
 
