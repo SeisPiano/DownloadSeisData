@@ -154,7 +154,7 @@ for station in stations:
 
                 st.write(filename, format='SAC')
                 
-                distance_in_m, az, baz = gps2dist_azimuth(sta_lat, sta_lon, evt_lat, evt_lon)
+                distance_in_m, baz, az = gps2dist_azimuth(sta_lat, sta_lon, evt_lat, evt_lon)
                 distance_in_km = distance_in_m*0.001
                 distance_in_degree = kilometer2degrees(distance_in_km)
         
