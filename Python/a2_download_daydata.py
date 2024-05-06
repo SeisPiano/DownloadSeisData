@@ -11,11 +11,16 @@ Preprocssing steps included here are:
 Yuechu Wu
 12131066@mail.sustech.edu.cn
 2024-03-28
+
+Added progress bar
+Yuechu Wu
+2024-05-06
 """
 
 
 import os
 import pandas as pd
+from tqdm import tqdm
 from obspy import UTCDateTime
 from obspy.io.sac import SACTrace
 from obspy.clients.fdsn import Client
@@ -65,6 +70,26 @@ stations_channels  = metadata['channels']
 
 client = Client('IRIS')
 
+data_numbers = 0
+ista = -1
+for station in stations:
+    ista += 1
+    if not station in stations_download:
+        continue
+    
+    channels_str = stations_channels[ista]        
+    channels = channels_str.split(',')
+    
+    start_date = datetime.strptime(stations_starttime[ista][0:10],'%Y-%m-%d')
+    end_date = datetime.strptime(stations_endtime[ista][0:10],'%Y-%m-%d')
+
+    delta = abs(end_date - start_date)
+
+    data_number = len(channels)*delta.days
+
+    data_numbers = data_number + data_numbers
+
+pbar = tqdm(total=data_numbers)
 
 ista = -1
 for station in stations:
@@ -153,5 +178,9 @@ for station in stations:
             except Exception as e:
                 print(e)
                 print(f'Unable to download {filename}. Skip!')
+
+            pbar.update(1)
+
+pbar.close()
 
         
