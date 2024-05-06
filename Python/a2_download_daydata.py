@@ -126,6 +126,8 @@ for station in stations:
 
         for channel in channels:
 
+            pbar.update(1)
+
             filename = f'{output_dir}/{network}/{station}/{dayid}_{network}_{station}_{channel}.SAC'
 
             if os.path.isfile(filename):
@@ -179,7 +181,6 @@ for station in stations:
                 print(e)
                 print(f'Unable to download {filename}. Skip!')
 
-            pbar.update(1)
 
 pbar.close()
 
