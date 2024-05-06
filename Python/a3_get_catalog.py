@@ -26,12 +26,12 @@ network = 'XO'  # network name
 # download event information from 'minmag_local' to 'maxmag_local'
 # within the range of 0 to 'maxradius_local'.
 minmag_local = 6
-maxmag_local = 7
+maxmag_local = 6.5
 maxradius_local = 90
 
 # Global: Download event information globally 
 # that is greater than 'minmag_global'.
-minmag_global = 7
+minmag_global = 6.5
 
 
 
