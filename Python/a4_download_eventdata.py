@@ -11,11 +11,16 @@ Preprocessing steps included here are:
 Yuechu Wu
 12131066@mail.sustech.edu.cn
 2024-03-28
+
+Added progress bar
+Yuechu Wu
+2024-05-06
 """
 
 
 import os
 import pandas as pd
+from tqdm import tqdm
 from obspy import UTCDateTime
 from obspy.io.sac import SACTrace
 from obspy.taup import TauPyModel
@@ -69,6 +74,27 @@ stations_channels  = metadata['channels']
 
 client = Client('IRIS')
 model = TauPyModel(model='iasp91')
+
+data_numbers = 0
+ista = -1
+for station in stations:
+    ista += 1
+    if not station in stations_download:
+        continue
+    
+    channels_str = stations_channels[ista]        
+    channels = channels_str.split(',')
+    
+    # station catalog file name
+    catalogfile = f'catalog/{network}/{network}_{station}_catalog.txt'
+    catalog = pd.read_csv(catalogfile, sep='\t', index_col=0)
+
+    data_number = len(channels)*len(catalog)
+
+    data_numbers = data_number + data_numbers
+
+pbar = tqdm(total=data_numbers)
+
 
 ista = -1
 for station in stations:
@@ -225,5 +251,9 @@ for station in stations:
             except Exception as e:
                 print(e)
                 print(f'Unable to download {filename}. Skip!')
+
+            pbar.update(1)
+
+pbar.close()
 
         
