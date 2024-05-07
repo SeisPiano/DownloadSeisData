@@ -2,6 +2,8 @@
 Download seismic event data and write station 
 and event information into SAC header.
 
+The start time of the event is the origin time + btime.
+
 Basic preprocessing is also completed.
 Preprocessing steps included here are:
 - Response Removal
@@ -22,12 +24,15 @@ import os
 import pandas as pd
 from tqdm import tqdm
 from obspy import UTCDateTime
-from obspy.io.sac import SACTrace
 from obspy.taup import TauPyModel
+from obspy.io.sac import SACTrace
 from obspy.clients.fdsn import Client
 from obspy.geodetics import gps2dist_azimuth
 from obspy.geodetics import kilometer2degrees
 
+
+
+output_dir = 'DATA/sacdata_event'  # seismic event data directory
 
 
 network  = 'XO'  # network name
@@ -49,7 +54,6 @@ btime = -600
 # The lower and upper limits of Rayleigh wave velocity (km/s)
 Rayleigh_velocity = [3, 4.5]
 
-output_dir = 'DATA/sacdata_event'  # seismic event data directory
 
 metadatafile = network + '_fdsn_metadata.txt'  # metadata file name
 
@@ -90,7 +94,6 @@ for station in stations:
     catalog = pd.read_csv(catalogfile, sep='\t', index_col=0)
 
     data_number = len(channels)*len(catalog)
-
     data_numbers = data_number + data_numbers
 
 pbar = tqdm(total=data_numbers)
@@ -102,7 +105,6 @@ for station in stations:
     if not station in stations_download:
         continue
     
-  
     sta_lat = stations_latitude[ista]
     sta_lon = stations_longitude[ista]
     sta_ele = stations_elevation[ista]
@@ -176,11 +178,11 @@ for station in stations:
                 # st.resample(samprate)
                 # Demean, detrend and taper
                 st.detrend('demean')
-                st.taper(max_percentage=0.1, type='cosine')
-
+                st.taper(max_percentage=0.1)
 
 
                 st.write(filename, format='SAC')
+                
                 
                 distance_in_m, baz, az = gps2dist_azimuth(sta_lat, sta_lon, evt_lat, evt_lon)
                 distance_in_km = distance_in_m*0.001
@@ -256,5 +258,4 @@ for station in stations:
 
 
 pbar.close()
-
-        
+    
