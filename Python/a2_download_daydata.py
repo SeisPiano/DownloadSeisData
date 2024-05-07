@@ -28,6 +28,9 @@ from datetime import datetime,timedelta
 
 
 
+output_dir = 'DATA/sacdata_day'  # seismic day data directory
+
+
 network  = 'XO'  # network name
 location = '--'  # for OBS, location is '--'
 stations_download = ['WD58','WS75']  # list of stations to download
@@ -39,8 +42,6 @@ output_units_seis = 'DISP'
 output_units_pres = 'DEF'
 
 # samprate = 5  # new sample rate
-
-output_dir = 'DATA/sacdata_day'  # seismic day data directory
 
 
 metadatafile = network + '_fdsn_metadata.txt'  # metadata file name
@@ -86,7 +87,6 @@ for station in stations:
     delta = abs(end_date - start_date)
 
     data_number = len(channels)*delta.days
-
     data_numbers = data_number + data_numbers
 
 pbar = tqdm(total=data_numbers)
@@ -183,5 +183,4 @@ for station in stations:
 
 
 pbar.close()
-
-        
+     
