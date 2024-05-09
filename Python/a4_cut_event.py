@@ -179,10 +179,10 @@ for station in stations:
             # If you don't need all or part of the preprocessing, 
             # you can comment out the corresponding lines.   
             # Downsampling
-            # st.resample(samprate)
+            # st_event.resample(samprate)
             # Demean, detrend and taper
-            st.detrend('demean')
-            st.taper(max_percentage=0.1)
+            st_event.detrend('demean')
+            st_event.taper(max_percentage=0.1)
 
 
             st_event.write(filename, format='SAC')
