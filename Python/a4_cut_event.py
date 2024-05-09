@@ -148,9 +148,9 @@ for station in stations:
             
                
             if start_date == end_date:
-                print(f'{input_dir}/{network}/{station}/*{start_date}*{channel}.SAC')
+                
                 day_filename = glob.glob(f'{input_dir}/{network}/{station}/*{start_date}*{channel}.SAC')
-                print(day_filename)
+                
                 if not day_filename:
                     print('The day data does not exist. Skip!')
                     continue
