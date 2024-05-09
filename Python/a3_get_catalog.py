@@ -115,8 +115,8 @@ for ista in tqdm(range(len(stations))):
             
         
         df = pd.DataFrame({'event id': eventids, 'origin time': otimes_str, 
-                        'latitude': events_latitude, 'longitude': events_longitude, 'depth': events_depth, 
-                        'magnitude type': magnitude_types, 'magnitude': magnitudes, 'description': descriptions})
+                           'latitude': events_latitude, 'longitude': events_longitude, 'depth': events_depth, 
+                           'magnitude type': magnitude_types, 'magnitude': magnitudes, 'description': descriptions})
         
 
         filename = f'{output_dir}/{network}/{network}_{station}_catalog.txt'
