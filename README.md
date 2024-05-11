@@ -3,7 +3,7 @@
 
 Now you can conveniently download seismic data using the DownloadSeisData app.
 
-<div align=center><img src="FIGURES/DownloadSeisData.png" width="650"/></div>
+<div align=center><img src="FIGURE/DownloadSeisData.png" width="650"/></div>
 
 
 ## Python version manual
