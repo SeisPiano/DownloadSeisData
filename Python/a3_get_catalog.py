@@ -65,6 +65,7 @@ client = Client('IRIS')
 for ista in tqdm(range(len(stations))):
     station = stations[ista]
     print(station)
+    
     sta_lat = stations_latitude[ista]
     sta_lon = stations_longitude[ista]
     
