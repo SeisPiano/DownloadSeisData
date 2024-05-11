@@ -1,10 +1,14 @@
 # DownloadSeisData
 `DownloadSeisData` is a software package that automatically downloads seismic data. We strongly recommend using the Python version based on [ObsPy](https://github.com/obspy/obspy). It can automatically download station metadata, daily waveform data, and instrument responses. In addition, it can also download earthquake catalogs and waveform data of earthquake events based on station metadata. All waveform data is saved in `SAC` format. Since the corresponding response file is downloaded, We can convert the units of the waveform to displacement, velocity, acceleration (seismometer), or pressure (pressure gauge). At the same time, `DownloadSeisData` also saves station information and event information in the SAC header for subsequent use.
 
+Now you can conveniently download seismic data using the DownloadSeisData app.
+
+<div align=center><img src="FIGURES/DownloadSeisData.png" width="650"/></div>
 
 
 ## Python version manual
 The Python version is based on [ObsPy](https://github.com/obspy/obspy), very concise and easy to read. It is strongly recommended to use this version, and the Bash version will no longer be maintained.
+
 
 ### Requirements
 - python 3.8+
