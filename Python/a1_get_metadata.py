@@ -109,7 +109,7 @@ for network in inventory:
 df = pd.DataFrame({'station': stations_code,
                    'starttime': stations_starttime, 'endtime': stations_endtime,
                    'latitude': stations_latitude, 'longitude': stations_longitude, 'elevation': stations_elevation,
-                   'channels':stations_channels, 'total channels': stations_total_channels, 'site': stations_site})
+                   'channel':stations_channels, 'channels': stations_total_channels, 'site': stations_site})
 
 filename = f'{network_code}_fdsn_metadata.txt'
 df.to_csv(filename, sep='\t', float_format='%.6f')
