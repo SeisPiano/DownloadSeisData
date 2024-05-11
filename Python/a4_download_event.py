@@ -73,7 +73,7 @@ stations_endtime   = metadata['endtime']
 stations_latitude  = metadata['latitude']
 stations_longitude = metadata['longitude']
 stations_elevation = metadata['elevation']
-stations_channels  = metadata['channels']
+stations_channels  = metadata['channel']
 
 
 client = Client('IRIS')
