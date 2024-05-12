@@ -188,8 +188,8 @@ for station in stations:
                 distance_in_km = distance_in_m*0.001
                 distance_in_degree = kilometer2degrees(distance_in_km)
         
-                P_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree,phase_list='P')
-                S_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree,phase_list='S')
+                P_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree, phase_list='P')
+                S_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree, phase_list='S')
                                                        
                 # Rayleigh wave window
                 Rayleigh_begin = distance_in_km / Rayleigh_velocity[1]
