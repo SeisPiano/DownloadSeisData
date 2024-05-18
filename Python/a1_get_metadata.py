@@ -20,6 +20,9 @@ network_code  = 'XO'  # AACSE: Alaska Amphibious Community seismic Experiment  X
 network_starttime = UTCDateTime('2018-01-01')
 network_endtime   = UTCDateTime('2019-12-31')
 
+# '?H?' for seismometer, '??H' for pressure channels (DPG or hydrophone)
+channel_query = '?H?,??H'
+
 # Define channel priority: L > B > H
 # Usually, L = 1 Hz, B = 20-50 Hz, H = 100 Hz
 # Prioritizing downloading the L channel without the need 
@@ -33,9 +36,9 @@ priority_order = {'L': 0, 'B': 1, 'H': 2, 'E': 3}
 ##### END OF USER INPUT #####
 client = Client('IRIS')
 
-# '?H?' for seismometer, '??H' for pressure channels (DPG or hydrophone)
+
 inventory = client.get_stations(network=network_code,
-                                channel='?H?,??H',
+                                channel=channel_query,
                                 starttime=network_starttime,
                                 endtime=network_endtime,
                                 level='channel')
