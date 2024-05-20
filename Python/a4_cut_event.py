@@ -11,6 +11,7 @@ Yuechu Wu
 
 import os
 import glob
+import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from obspy import read
@@ -170,95 +171,93 @@ for station in stations:
                 print('The day data does not include event data. Skip!')
                 continue
             
-            try:                                   
-                tr = st[0]
-                dt = tr.stats.delta
-                st_event = st.trim(starttime=starttime, endtime=endtime-dt)
+            if np.ma.is_masked(st[0].data):
+                st[0].data = st[0].data.filled()
 
-                ##### PREPROCESSING #####
-                # If you don't need all or part of the preprocessing, 
-                # you can comment out the corresponding lines.   
-                # Downsampling
-                # st_event.resample(samprate)
-                # Demean, detrend and taper
-                st_event.detrend('demean')
-                st_event.taper(max_percentage=0.1)
+            tr = st[0]
+            dt = tr.stats.delta
+            st_event = st.trim(starttime=starttime, endtime=endtime-dt)
 
-
-                st_event.write(filename, format='SAC')
-                
-                                                                        
-                distance_in_m, baz, az = gps2dist_azimuth(sta_lat, sta_lon, evt_lat, evt_lon)
-                distance_in_km = distance_in_m*0.001
-                distance_in_degree = kilometer2degrees(distance_in_km)
-        
-                P_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree, phase_list='P')
-                S_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree, phase_list='S')
-                                                        
-                # Rayleigh wave window
-                Rayleigh_begin = distance_in_km / Rayleigh_velocity[1]
-                Rayleigh_end   = distance_in_km / Rayleigh_velocity[0]
-                
-                
-                # read header only
-                sac = SACTrace.read(filename, headonly=True)
-
-                ##### WRITE SAC HEADER #####
-                sac.knetwk = network
-                sac.kstnm  = station
-                sac.khole  = location
-                sac.kcmpnm = channel               
-                
-                sac.stla = sta_lat
-                sac.stlo = sta_lon
-                sac.stel = sta_ele
-                
-                sac.evla = evt_lat
-                sac.evlo = evt_lon
-                sac.evdp = evt_dep
-                sac.mag  = magnitude
-                
-                
-                sac.gcarc = distance_in_degree
-                sac.dist  = distance_in_km            
-                sac.az    = az
-                sac.baz   = baz
-                
-                
-                sac.o      = otime
-                sac.iztype = 'io'    
-                sac.ko     = 'O'       
-
-                # P and S prediction arrival
-                if P_arrivals:    
-                    sac.a   = otime + P_arrivals[0].time
-                    sac.t0  = otime + S_arrivals[0].time
-                    sac.ka  = 'P'
-                    sac.kt0 = 'S'
-                
-                # Rayleigh wave window
-                sac.t1  = otime + Rayleigh_begin
-                sac.t2  = otime + Rayleigh_end
-                sac.kt1 = 'RayStart'
-                sac.kt2 = 'RayEnd'
-                
-                ##### WRITE ORIGIN TIME INTO SAC HEADER #####
-                # date, hour, minute, integer of seconds
-                sac.kevnm = otime_str[0:4] + otime_str[5:7] + otime_str[8:10] + \
-                            otime_str[10:13] + otime_str[14:16] + otime_str[17:19]
-                # decimal of seconds
-                sac.kuser0 = otime_str[19:27]
-                
-                # magnitude_type
-                sac.kuser1 = magnitude_type
+            ##### PREPROCESSING #####
+            # If you don't need all or part of the preprocessing, 
+            # you can comment out the corresponding lines.   
+            # Downsampling
+            # st_event.resample(samprate)
+            # Demean, detrend and taper
+            st_event.detrend('demean')
+            st_event.taper(max_percentage=0.1)
 
 
-                # write header-only, file must exist
-                sac.write(filename, headonly=True)
+            st_event.write(filename, format='SAC')
+            
+                                                                    
+            distance_in_m, baz, az = gps2dist_azimuth(sta_lat, sta_lon, evt_lat, evt_lon)
+            distance_in_km = distance_in_m*0.001
+            distance_in_degree = kilometer2degrees(distance_in_km)
+    
+            P_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree, phase_list='P')
+            S_arrivals = model.get_travel_times(source_depth_in_km=evt_dep, distance_in_degree=distance_in_degree, phase_list='S')
+                                                    
+            # Rayleigh wave window
+            Rayleigh_begin = distance_in_km / Rayleigh_velocity[1]
+            Rayleigh_end   = distance_in_km / Rayleigh_velocity[0]
+            
+            
+            # read header only
+            sac = SACTrace.read(filename, headonly=True)
 
-            except Exception as e:
-                print(e)
-                print(f'Unable to cut {filename}. Skip!')
+            ##### WRITE SAC HEADER #####
+            sac.knetwk = network
+            sac.kstnm  = station
+            sac.khole  = location
+            sac.kcmpnm = channel               
+            
+            sac.stla = sta_lat
+            sac.stlo = sta_lon
+            sac.stel = sta_ele
+            
+            sac.evla = evt_lat
+            sac.evlo = evt_lon
+            sac.evdp = evt_dep
+            sac.mag  = magnitude
+            
+            
+            sac.gcarc = distance_in_degree
+            sac.dist  = distance_in_km            
+            sac.az    = az
+            sac.baz   = baz
+            
+            
+            sac.o      = otime
+            sac.iztype = 'io'    
+            sac.ko     = 'O'       
+
+            # P and S prediction arrival
+            if P_arrivals:    
+                sac.a   = otime + P_arrivals[0].time
+                sac.t0  = otime + S_arrivals[0].time
+                sac.ka  = 'P'
+                sac.kt0 = 'S'
+            
+            # Rayleigh wave window
+            sac.t1  = otime + Rayleigh_begin
+            sac.t2  = otime + Rayleigh_end
+            sac.kt1 = 'RayStart'
+            sac.kt2 = 'RayEnd'
+            
+            ##### WRITE ORIGIN TIME INTO SAC HEADER #####
+            # date, hour, minute, integer of seconds
+            sac.kevnm = otime_str[0:4] + otime_str[5:7] + otime_str[8:10] + \
+                        otime_str[10:13] + otime_str[14:16] + otime_str[17:19]
+            # decimal of seconds
+            sac.kuser0 = otime_str[19:27]
+            
+            # magnitude_type
+            sac.kuser1 = magnitude_type
+
+
+            # write header-only, file must exist
+            sac.write(filename, headonly=True)
 
 
 pbar.close()
