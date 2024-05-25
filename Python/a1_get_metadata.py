@@ -24,7 +24,7 @@ network_endtime   = UTCDateTime('2019-12-31')
 channel_query = '?H?,??H'
 
 # Define channel priority: L > B > H
-# Usually, L = 1 Hz, B = 20-50 Hz, H = 100 Hz
+# Usually, L = 1 Hz, B = 10-50 Hz, H = 100 Hz
 # Prioritizing downloading the L channel without the need 
 # for high-frequency signals can save a lot of time
 priority_order = {'L': 0, 'B': 1, 'H': 2, 'E': 3}
