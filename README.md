@@ -6,6 +6,8 @@
 
 Now you can conveniently download seismic data using the `DownloadSeisData` app.
 
+Introduction to the usage of `DownloadSeisData` app on the [Bilibili](https://www.bilibili.com/video/BV1xETMegE5f/?share_source=copy_web&vd_source=6749f185103c3e99f2bb4b384f044916)
+
 <div align=center><img src="FIGURE/app.png" width="650"/></div>
 
 
